@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Coronary Artery Quality (CAQ) Index</title>
+
+  <meta
+    name="description"
+    content="The Coronary Artery Quality (CAQ) Index is a proposed framework for understanding and improving long-term cardiovascular health."
+  >
+
+  <meta name="author" content="Dr. Dokyoung Yoon, MD, PhD">
+
+  <style>
+
+    /* =========================================================
+       RESET & GLOBAL
+    ========================================================= */
+
+    :root {
+      --navy: #102a43;
+      --navy-dark: #0a2035;
+
+      --blue: #1769d1;
+      --blue-dark: #1155aa;
+      --blue-light: #edf6ff;
+
+      --teal: #199b9b;
+      --green: #41975d;
+      --purple: #7560c7;
+      --gold: #d8a52b;
+
+      --text: #26384d;
+      --muted: #65778b;
+
+      --line: #dce6ef;
+
+      --background: #f6f9fc;
+      --white: #ffffff;
+
+      --shadow:
+        0 12px 35px rgba(16, 42, 67, 0.08);
+
+      --shadow-hover:
+        0 18px 42px rgba(16, 42, 67, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+      color: var(--text);
+      background: var(--background);
+      line-height: 1.6;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 76px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+
+      border-radius: 12px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1769d1,
+          #54a8ee
+        );
+
+      color: white;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 19px;
+      font-weight: 800;
+
+      box-shadow:
+        0 7px 18px rgba(23, 105, 209, 0.22);
+    }
+
+    .brand-title {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--navy);
+
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--muted);
+
+      margin-top: 3px;
+      letter-spacing: 0.02em;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+
+      font-size: 14px;
+    }
+
+    nav a {
+      position: relative;
+      padding: 28px 0;
+
+      color: #33485e;
+
+      transition:
+        color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--blue);
+    }
+
+    nav a.active {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    nav a.active::after {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      right: 0;
+      bottom: 19px;
+
+      height: 3px;
+
+      background: var(--blue);
+
+      border-radius: 5px;
+    }
+
+
+    /* =========================================================
+       HERO
+    ========================================================= */
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          110deg,
+          #f8fbff 0%,
+          #eff8ff 55%,
+          #e3f3ff 100%
+        );
+
+      border-bottom: 1px solid #e0edf7;
+    }
+
+    .hero::before {
+      content: "";
+
+      position: absolute;
+
+      width: 500px;
+      height: 500px;
+
+      border-radius: 50%;
+
+      right: -160px;
+      top: -180px;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(23, 105, 209, 0.08),
+          rgba(23, 105, 209, 0)
+        );
+    }
+
+    .hero-inner {
+      min-height: 465px;
+
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+
+      align-items: center;
+
+      gap: 50px;
+    }
+
+    .hero-content {
+      padding: 65px 0;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+
+      gap: 9px;
+
+      color: var(--blue);
+
+      font-size: 12px;
+      font-weight: 750;
+
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+
+      width: 31px;
+      height: 3px;
+
+      background: var(--blue);
+
+      border-radius: 10px;
+    }
+
+    .hero h1 {
+      max-width: 700px;
+
+      color: var(--navy);
+
+      font-size: clamp(40px, 5vw, 61px);
+
+      line-height: 1.08;
+
+      letter-spacing: -0.04em;
+
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      color: var(--blue);
+    }
+
+    .hero-description {
+      max-width: 650px;
+
+      color: #40556c;
+
+      font-size: 18px;
+
+      line-height: 1.7;
+
+      margin-bottom: 28px;
+    }
+
+    .doctor {
+      display: flex;
+      align-items: center;
+
+      gap: 10px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+    }
+
+    .doctor-icon {
+      width: 28px;
+      height: 28px;
+
+      border-radius: 50%;
+
+      background: white;
+
+      border: 1px solid #c9dff3;
+
+      color: var(--blue);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .doctor strong {
+      color: var(--blue);
+    }
+
+
+    /* =========================================================
+       HERO SVG GRAPHIC
+    ========================================================= */
+
+    .hero-visual {
+      min-height: 420px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: relative;
+    }
+
+    .caq-graphic {
+      width: min(410px, 100%);
+
+      position: relative;
+
+      filter:
+        drop-shadow(
+          0 18px 30px rgba(16, 42, 67, 0.10)
+        );
+    }
+
+    .graphic-center {
+      fill: white;
+      stroke: #d6e8f8;
+      stroke-width: 2;
+    }
+
+    .graphic-ring {
+      fill: none;
+      stroke: #cfe4f6;
+      stroke-width: 1;
+    }
+
+    .graphic-axis {
+      stroke: #d5e4ef;
+      stroke-width: 1;
+    }
+
+    .graphic-data {
+      fill: rgba(23, 105, 209, 0.16);
+      stroke: var(--blue);
+      stroke-width: 3;
+    }
+
+    .graphic-dot {
+      fill: var(--blue);
+    }
+
+    .graphic-label {
+      font-size: 12px;
+      font-weight: 600;
+      fill: var(--navy);
+    }
+
+    .graphic-small {
+      font-size: 10px;
+      fill: var(--muted);
+    }
+
+
+    /* =========================================================
+       SECTIONS
+    ========================================================= */
+
+    section {
+      padding: 82px 0;
+    }
+
+    .section-white {
+      background: var(--white);
+    }
+
+    .section-heading {
+      margin-bottom: 42px;
+    }
+
+    .section-line {
+      width: 37px;
+      height: 3px;
+
+      display: block;
+
+      background: var(--blue);
+
+      border-radius: 8px;
+
+      margin-bottom: 12px;
+    }
+
+    .section-heading h2 {
+      color: var(--navy);
+
+      font-size: 34px;
+
+      line-height: 1.2;
+
+      letter-spacing: -0.025em;
+    }
+
+    .section-heading p {
+      max-width: 720px;
+
+      color: var(--muted);
+
+      margin-top: 12px;
+
+      font-size: 15px;
+    }
+
+
+    /* =========================================================
+       INTRODUCTION
+    ========================================================= */
+
+    .intro-grid {
+      display: grid;
+
+      grid-template-columns: 1fr 0.85fr;
+
+      gap: 70px;
+
+      align-items: center;
+    }
+
+    .intro-text p {
+      color: #526478;
+
+      font-size: 16px;
+
+      line-height: 1.85;
+
+      margin-bottom: 18px;
+    }
+
+    .intro-text strong {
+      color: var(--navy);
+    }
+
+    .intro-highlight {
+      margin-top: 26px;
+
+      padding: 19px 22px;
+
+      background: var(--blue-light);
+
+      border-left: 4px solid var(--blue);
+
+      border-radius:
+        0
+        12px
+        12px
+        0;
+
+      color: #315575;
+
+      font-size: 14px;
+
+      line-height: 1.7;
+    }
+
+    .intro-panel {
+      position: relative;
+
+      min-height: 330px;
+
+      border-radius: 24px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #edf8ff,
+          #f8fcff
+        );
+
+      border: 1px solid #dcecf8;
+
+      overflow: hidden;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro-panel::before {
+      content: "";
+
+      position: absolute;
+
+      width: 280px;
+      height: 280px;
+
+      border-radius: 50%;
+
+      border: 1px solid #d5e9f9;
+    }
+
+    .intro-panel::after {
+      content: "";
+
+      position: absolute;
+
+      width: 210px;
+      height: 210px;
+
+      border-radius: 50%;
+
+      border: 1px solid #d5e9f9;
+    }
+
+    .intro-card {
+      position: relative;
+      z-index: 2;
+
+      width: 76%;
+
+      padding: 28px;
+
+      background: rgba(255,255,255,.91);
+
+      border: 1px solid white;
+
+      border-radius: 18px;
+
+      box-shadow:
+        0 18px 45px rgba(16,42,67,.09);
+
+      text-align: center;
+    }
+
+    .intro-card-icon {
+      width: 62px;
+      height: 62px;
+
+      margin: 0 auto 15px;
+
+      border-radius: 50%;
+
+      background: #e7f3ff;
+
+      border: 1px solid #cfe6fa;
+
+      color: var(--blue);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .intro-card h3 {
+      color: var(--navy);
+
+      font-size: 17px;
+
+      margin-bottom: 8px;
+    }
+
+    .intro-card p {
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FRAMEWORK
+    ========================================================= */
+
+    .framework {
+      background: #f7fafc;
+    }
+
+    .framework-grid {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 22px;
+    }
+
+    .domain-card {
+      position: relative;
+
+      background: white;
+
+      border: 1px solid var(--line);
+
+      border-radius: 18px;
+
+      padding: 28px;
+
+      display: grid;
+
+      grid-template-columns: 62px 1fr;
+
+      gap: 20px;
+
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+    }
+
+    .domain-card:hover {
+      transform: translateY(-4px);
+
+      box-shadow: var(--shadow-hover);
+    }
+
+    .domain-icon {
+      width: 56px;
+      height: 56px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 22px;
+
+      font-weight: 700;
+    }
+
+    .clinical .domain-icon {
+      background: #e7f2ff;
+      color: var(--blue);
+    }
+
+    .lifestyle .domain-icon {
+      background: #e8f7ed;
+      color: var(--green);
+    }
+
+    .functional .domain-icon {
+      background: #f1edff;
+      color: var(--purple);
+    }
+
+    .resilience .domain-icon {
+      background: #fff7df;
+      color: var(--gold);
+    }
+
+    .domain-card h3 {
+      color: var(--navy);
+
+      font-size: 18px;
+
+      line-height: 1.3;
+
+      margin-bottom: 10px;
+    }
+
+    .domain-card ul {
+      padding-left: 18px;
+
+      color: #586a7d;
+
+      font-size: 13px;
+    }
+
+    .domain-card li {
+      margin-bottom: 6px;
+    }
+
+    .score-note {
+      margin-top: 24px;
+
+      padding: 19px 22px;
+
+      border-radius: 13px;
+
+      background: #edf6ff;
+
+      border: 1px solid #c9e2f8;
+
+      color: #355675;
+
+      font-size: 14px;
+
+      line-height: 1.65;
+    }
+
+    .score-note strong {
+      color: var(--navy);
+    }
+
+
+    /* =========================================================
+       VISUAL MODEL
+    ========================================================= */
+
+    .visual-grid {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 70px;
+
+      align-items: center;
+    }
+
+    .radar-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .radar {
+      width: min(400px, 100%);
+      height: auto;
+    }
+
+    .radar-ring {
+      fill: none;
+      stroke: #dce6ef;
+      stroke-width: 1;
+    }
+
+    .radar-axis {
+      stroke: #dce6ef;
+      stroke-width: 1;
+    }
+
+    .radar-data {
+      fill: rgba(23, 105, 209, .17);
+      stroke: var(--blue);
+      stroke-width: 3;
+    }
+
+    .radar-dot {
+      fill: var(--blue);
+    }
+
+    .radar-label {
+      fill: var(--navy);
+
+      font-size: 13px;
+
+      font-weight: 600;
+    }
+
+    .radar-number {
+      fill: #8091a2;
+
+      font-size: 9px;
+    }
+
+    .visual-description {
+      color: #526478;
+
+      font-size: 15px;
+
+      line-height: 1.8;
+    }
+
+    .visual-description p {
+      margin-bottom: 20px;
+    }
+
+    .benefits {
+      list-style: none;
+
+      margin-top: 20px;
+    }
+
+    .benefits li {
+      display: flex;
+
+      align-items: flex-start;
+
+      gap: 12px;
+
+      margin-bottom: 14px;
+    }
+
+    .check {
+      flex: 0 0 24px;
+
+      width: 24px;
+      height: 24px;
+
+      border-radius: 50%;
+
+      background: #e7f3ff;
+
+      color: var(--blue);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 12px;
+
+      font-weight: 800;
+    }
+
+
+    /* =========================================================
+       SCORE SECTION
+    ========================================================= */
+
+    .score-section {
+      padding: 62px 0;
+
+      background:
+        linear-gradient(
+          110deg,
+          #102a43,
+          #123e65
+        );
+
+      color: white;
+    }
+
+    .score-inner {
+      display: grid;
+
+      grid-template-columns: 1fr auto;
+
+      gap: 50px;
+
+      align-items: center;
+    }
+
+    .score-section h2 {
+      font-size: 30px;
+
+      line-height: 1.25;
+
+      margin-bottom: 10px;
+    }
+
+    .score-section p {
+      max-width: 720px;
+
+      color: #c6d6e6;
+
+      font-size: 15px;
+    }
+
+    .score-number {
+      color: #66b5ff;
+
+      font-size: 67px;
+
+      font-weight: 800;
+
+      line-height: 1;
+
+      white-space: nowrap;
+    }
+
+    .score-number small {
+      display: block;
+
+      color: #b7c9da;
+
+      font-size: 12px;
+
+      font-weight: 500;
+
+      text-align: center;
+
+      margin-top: 8px;
+
+      letter-spacing: .08em;
+
+      text-transform: uppercase;
+    }
+
+
+    /* =========================================================
+       DISCLAIMER
+    ========================================================= */
+
+    .disclaimer {
+      padding: 30px 0;
+
+      background: #f2f5f8;
+
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .disclaimer p {
+      max-width: 950px;
+
+      margin: 0 auto;
+
+      color: #718092;
+
+      font-size: 12px;
+
+      line-height: 1.7;
+
+      text-align: center;
+    }
+
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+
+    footer {
+      background: var(--navy-dark);
+
+      color: #aebdca;
+
+      padding: 40px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 30px;
+    }
+
+    .footer-brand {
+      color: white;
+
+      font-size: 19px;
+
+      font-weight: 750;
+    }
+
+    .footer-subtitle {
+      color: #91a4b7;
+
+      font-size: 12px;
+
+      margin-top: 3px;
+    }
+
+    .footer-right {
+      font-size: 12px;
+
+      text-align: right;
+
+      line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+
+    @media (max-width: 850px) {
+
+      .nav {
+        min-height: 68px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+      }
+
+      .hero-content {
+        padding: 55px 0 15px;
+      }
+
+      .hero-visual {
+        min-height: 330px;
+
+        padding-bottom: 35px;
+      }
+
+      .intro-grid,
+      .visual-grid {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+      }
+
+      .framework-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score-inner {
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+      }
+
+      .score-number {
+        font-size: 55px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+
+        align-items: flex-start;
+      }
+
+      .footer-right {
+        text-align: left;
+      }
+    }
+
+
+    @media (max-width: 520px) {
+
+      .container {
+        width: min(100% - 28px, 1120px);
+      }
+
+      section {
+        padding: 60px 0;
+      }
+
+      .brand-title {
+        font-size: 19px;
+      }
+
+      .hero h1 {
+        font-size: 39px;
+      }
+
+      .hero-description {
+        font-size: 16px;
+      }
+
+      .hero-visual {
+        min-height: 280px;
+      }
+
+      .domain-card {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+      }
+
+      .section-heading h2 {
+        font-size: 29px;
+      }
+
+      .intro-card {
+        width: 82%;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+  <!-- =========================================================
+       HEADER
+  ========================================================== -->
+
+  <header>
+
+    <div class="container nav">
+
+      <a href="#top" class="brand">
+
+        <div class="brand-mark">
+          CAQ
+        </div>
+
+        <div>
+
+          <div class="brand-title">
+            CAQ Index
+          </div>
+
+          <div class="brand-subtitle">
+            Coronary Artery Quality
+          </div>
+
+        </div>
+
+      </a>
+
+
+      <nav>
+
+        <a
+          href="#introduction"
+          class="active"
+        >
+          Introduction
+        </a>
+
+        <a href="#framework">
+          Framework
+        </a>
+
+        <a href="#visual">
+          Visual Model
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+
+  <main id="top">
+
+
+    <!-- =======================================================
+         HERO
+    ======================================================== -->
+
+    <section class="hero">
+
+      <div class="container hero-inner">
+
+
+        <div class="hero-content">
+
+          <div class="eyebrow">
+            Cardiovascular Health Framework
+          </div>
+
+
+          <h1>
+            Coronary Artery
+            <span>Quality (CAQ)</span>
+            Index
+          </h1>
+
+
+          <p class="hero-description">
+
+            A next-generation approach to cardiovascular prevention
+            that emphasizes long-term vascular health and sustained
+            lifestyle change.
+
+          </p>
+
+
+          <div class="doctor">
+
+            <div class="doctor-icon">
+              +
+            </div>
+
+            <div>
+
+              Concept by
+              <strong>
+                Dr. Dokyoung Yoon, MD, PhD
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ================================================
+             HERO SVG GRAPHIC
+        ================================================= -->
+
+        <div class="hero-visual">
+
+          <svg
+            class="caq-graphic"
+            viewBox="0 0 430 430"
+            role="img"
+            aria-label="CAQ four-domain conceptual model"
+          >
+
+            <!-- outer decorative circles -->
+
+            <circle
+              cx="215"
+              cy="215"
+              r="184"
+              fill="none"
+              stroke="#d8eaf8"
+              stroke-width="1"
+            />
+
+            <circle
+              cx="215"
+              cy="215"
+              r="154"
+              fill="none"
+              stroke="#e2eff8"
+              stroke-width="1"
+            />
+
+
+            <!-- four domain background circles -->
+
+            <circle
+              cx="215"
+              cy="70"
+              r="42"
+              fill="#e7f2ff"
+            />
+
+            <circle
+              cx="360"
+              cy="215"
+              r="42"
+              fill="#e8f7ed"
+            />
+
+            <circle
+              cx="215"
+              cy="360"
+              r="42"
+              fill="#f1edff"
+            />
+
+            <circle
+              cx="70"
+              cy="215"
+              r="42"
+              fill="#fff7df"
+            />
+
+
+            <!-- connecting lines -->
+
+            <line
+              x1="215"
+              y1="112"
+              x2="215"
+              y2="173"
+              class="graphic-axis"
+            />
+
+            <line
+              x1="318"
+              y1="215"
+              x2="275"
+              y2="215"
+              class="graphic-axis"
+            />
+
+            <line
+              x1="215"
+              y1="318"
+              x2="215"
+              y2="257"
+              class="graphic-axis"
+            />
+
+            <line
+              x1="112"
+              y1="215"
+              x2="155"
+              y2="215"
+              class="graphic-axis"
+            />
+
+
+            <!-- center -->
+
+            <circle
+              cx="215"
+              cy="215"
+              r="68"
+              class="graphic-center"
+            />
+
+            <circle
+              cx="215"
+              cy="215"
+              r="57"
+              fill="#f8fbff"
+            />
+
+
+            <text
+              x="215"
+              y="208"
+              text-anchor="middle"
+              font-size="25"
+              font-weight="800"
+              fill="#102a43"
+            >
+              CAQ
+            </text>
+
+            <text
+              x="215"
+              y="229"
+              text-anchor="middle"
+              class="graphic-small"
+            >
+              Index
+            </text>
+
+
+            <!-- Clinical -->
+
+            <text
+              x="215"
+              y="64"
+              text-anchor="middle"
+              font-size="21"
+              font-weight="700"
+              fill="#1769d1"
+            >
+              C
+            </text>
+
+            <text
+              x="215"
+              y="132"
+              text-anchor="middle"
+              class="graphic-label"
+            >
+              Clinical
+            </text>
+
+            <text
+              x="215"
+              y="148"
+              text-anchor="middle"
+              class="graphic-small"
+            >
+              Markers
+            </text>
+
+
+            <!-- Lifestyle -->
+
+            <text
+              x="360"
+              y="222"
+              text-anchor="middle"
+              font-size="21"
+              font-weight="700"
+              fill="#41975d"
+            >
+              L
+            </text>
+
+            <text
+              x="360"
+              y="273"
+              text-anchor="middle"
+              class="graphic-label"
+            >
+              Lifestyle
+            </text>
+
+            <text
+              x="360"
+              y="289"
+              text-anchor="middle"
+              class="graphic-small"
+            >
+              Behaviors
+            </text>
+
+
+            <!-- Functional -->
+
+            <text
+              x="215"
+              y="367"
+              text-anchor="middle"
+              font-size="21"
+              font-weight="700"
+              fill="#7560c7"
+            >
+              F
+            </text>
+
+            <text
+              x="215"
+              y="412"
+              text-anchor="middle"
+              class="graphic-label"
+            >
+              Functional Health
+            </text>
+
+
+            <!-- Resilience -->
+
+            <text
+              x="70"
+              y="222"
+              text-anchor="middle"
+              font-size="21"
+              font-weight="700"
+              fill="#d8a52b"
+            >
+              R
+            </text>
+
+            <text
+              x="70"
+              y="273"
+              text-anchor="middle"
+              class="graphic-label"
+            >
+              Resilience
+            </text>
+
+            <text
+              x="70"
+              y="289"
+              text-anchor="middle"
+              class="graphic-small"
+            >
+              Positive Health
+            </text>
+
+          </svg>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         INTRODUCTION
+    ======================================================== -->
+
+    <section
+      id="introduction"
+      class="section-white"
+    >
+
+      <div class="container">
+
+
+        <div class="section-heading">
+
+          <span class="section-line"></span>
+
+          <h2>
+            Introduction
+          </h2>
+
+        </div>
+
+
+
+        <div class="intro-grid">
+
+
+          <div class="intro-text">
+
+            <p>
+
+              The
+              <strong>
+                Coronary Artery Quality (CAQ) Index
+              </strong>
+              is a dynamic and modifiable framework for cardiovascular
+              prevention.
+
+            </p>
+
+
+            <p>
+
+              Unlike traditional risk tools focused primarily on
+              event prediction, the CAQ Index frames coronary health
+              as
+              <strong>
+                dynamic, measurable, and modifiable.
+              </strong>
+
+            </p>
+
+
+            <p>
+
+              It provides patients and clinicians with an actionable
+              way to track improvement across clinical, behavioral,
+              functional, and resilience domains over time.
+
+            </p>
+
+
+            <div class="intro-highlight">
+
+              The goal is not simply to predict cardiovascular events,
+              but to help people build and maintain better cardiovascular
+              health over the long term.
+
+            </div>
+
+          </div>
+
+
+
+          <div class="intro-panel">
+
+            <div class="intro-card">
+
+              <div class="intro-card-icon">
+                +
+              </div>
+
+              <h3>
+                Dynamic Cardiovascular Health
+              </h3>
+
+              <p>
+
+                A multidimensional approach that connects
+                clinical measures, daily behaviors, physical
+                function, and positive health.
+
+              </p>
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         FRAMEWORK
+    ======================================================== -->
+
+    <section
+      id="framework"
+      class="framework"
+    >
+
+      <div class="container">
+
+
+        <div class="section-heading">
+
+          <span class="section-line"></span>
+
+          <h2>
+            Framework
+          </h2>
+
+          <p>
+
+            The CAQ Index brings together four complementary
+            dimensions of cardiovascular health.
+
+          </p>
+
+        </div>
+
+
+
+        <div class="framework-grid">
+
+
+          <!-- CLINICAL -->
+
+          <article class="domain-card clinical">
+
+            <div class="domain-icon">
+              C
+            </div>
+
+            <div>
+
+              <h3>
+                Clinical &amp; Physiological Markers
+              </h3>
+
+              <ul>
+
+                <li>
+                  Blood pressure
+                  (average &amp; variability)
+                </li>
+
+                <li>
+                  Lipid profile quality
+                  (LDL-C, HDL-C, triglycerides,
+                  ApoB/ApoA1)
+                </li>
+
+                <li>
+                  Glycemic control
+                  (fasting glucose, HbA1c,
+                  insulin resistance)
+                </li>
+
+                <li>
+                  Inflammation
+                  (hs-CRP, IL-6 and emerging biomarkers)
+                </li>
+
+                <li>
+                  Optional imaging
+                  (CAC score, CCTA features)
+                </li>
+
+              </ul>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- LIFESTYLE -->
+
+          <article class="domain-card lifestyle">
+
+            <div class="domain-icon">
+              L
+            </div>
+
+            <div>
+
+              <h3>
+                Lifestyle &amp; Behavioral Domains
+              </h3>
+
+              <ul>
+
+                <li>
+                  Nutrition quality
+                  (Mediterranean/DASH adherence)
+                </li>
+
+                <li>
+                  Physical activity
+                  (steps, MVPA minutes)
+                </li>
+
+                <li>
+                  Sleep health
+                  (duration, regularity, quality)
+                </li>
+
+                <li>
+                  Stress management &amp; mindfulness
+                </li>
+
+                <li>
+                  Tobacco avoidance;
+                  alcohol moderation
+                </li>
+
+              </ul>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- FUNCTIONAL -->
+
+          <article class="domain-card functional">
+
+            <div class="domain-icon">
+              F
+            </div>
+
+            <div>
+
+              <h3>
+                Functional Health Indicators
+              </h3>
+
+              <ul>
+
+                <li>
+                  Cardiorespiratory fitness
+                  (VO₂ max or field estimates)
+                </li>
+
+                <li>
+                  Body composition
+                  (BMI, waist-to-hip ratio,
+                  % body fat)
+                </li>
+
+                <li>
+                  Vascular flexibility
+                  (pulse wave velocity /
+                  stiffness)
+                </li>
+
+              </ul>
+
+            </div>
+
+          </article>
+
+
+
+          <!-- RESILIENCE -->
+
+          <article class="domain-card resilience">
+
+            <div class="domain-icon">
+              R
+            </div>
+
+            <div>
+
+              <h3>
+                Positive Health &amp; Resilience
+              </h3>
+
+              <ul>
+
+                <li>
+                  Consistency of healthy routines
+                  (habit streaks)
+                </li>
+
+                <li>
+                  Self-efficacy &amp;
+                  health literacy
+                </li>
+
+                <li>
+                  Social support &amp;
+                  environment for health
+                </li>
+
+              </ul>
+
+            </div>
+
+          </article>
+
+
+        </div>
+
+
+
+        <div class="score-note">
+
+          <strong>
+            Scoring concept:
+          </strong>
+
+          Scores can be normalized to a 0–10 scale per domain
+          and combined into a composite 0–100 CAQ score.
+          Weighting can favor lifestyle and resilience to reinforce
+          positive, modifiable change.
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         VISUAL MODEL
+    ======================================================== -->
+
+    <section
+      id="visual"
+      class="section-white"
+    >
+
+      <div class="container">
+
+
+        <div class="section-heading">
+
+          <span class="section-line"></span>
+
+          <h2>
+            Visual Model
+          </h2>
+
+          <p>
+
+            A four-domain view of coronary health and opportunities
+            for improvement.
+
+          </p>
+
+        </div>
+
+
+
+        <div class="visual-grid">
+
+
+          <!-- RADAR CHART -->
+
+          <div class="radar-wrapper">
+
+            <svg
+              class="radar"
+              viewBox="0 0 430 430"
+              role="img"
+              aria-label="Example CAQ radar chart"
+            >
+
+
+              <!-- Rings -->
+
+              <polygon
+                points="215,40 390,215 215,390 40,215"
+                class="radar-ring"
+              />
+
+              <polygon
+                points="215,75 355,215 215,355 75,215"
+                class="radar-ring"
+              />
+
+              <polygon
+                points="215,110 320,215 215,320 110,215"
+                class="radar-ring"
+              />
+
+              <polygon
+                points="215,145 285,215 215,285 145,215"
+                class="radar-ring"
+              />
+
+              <polygon
+                points="215,180 250,215 215,250 180,215"
+                class="radar-ring"
+              />
+
+
+              <!-- Axes -->
+
+              <line
+                x1="215"
+                y1="40"
+                x2="215"
+                y2="390"
+                class="radar-axis"
+              />
+
+              <line
+                x1="40"
+                y1="215"
+                x2="390"
+                y2="215"
+                class="radar-axis"
+              />
+
+
+              <!-- Example data
+                   Clinical = 7
+                   Lifestyle = 6
+                   Functional = 5
+                   Resilience = 8
+              -->
+
+              <polygon
+                points="
+                  215,92
+                  320,215
+                  215,250
+                  75,215
+                "
+                class="radar-data"
+              />
+
+
+              <!-- Data points -->
+
+              <circle
+                cx="215"
+                cy="92"
+                r="6"
+                class="radar-dot"
+              />
+
+              <circle
+                cx="320"
+                cy="215"
+                r="6"
+                class="radar-dot"
+              />
+
+              <circle
+                cx="215"
+                cy="250"
+                r="6"
+                class="radar-dot"
+              />
+
+              <circle
+                cx="75"
+                cy="215"
+                r="6"
+                class="radar-dot"
+              />
+
+
+              <!-- Numbers -->
+
+              <text
+                x="222"
+                y="184"
+                class="radar-number"
+              >
+                2
+              </text>
+
+              <text
+                x="222"
+                y="149"
+                class="radar-number"
+              >
+                4
+              </text>
+
+              <text
+                x="222"
+                y="114"
+                class="radar-number"
+              >
+                6
+              </text>
+
+              <text
+                x="222"
+                y="79"
+                class="radar-number"
+              >
+                8
+              </text>
+
+              <text
+                x="222"
+                y="44"
+                class="radar-number"
+              >
+                10
+              </text>
+
+
+              <!-- Labels -->
+
+              <text
+                x="215"
+                y="23"
+                text-anchor="middle"
+                class="radar-label"
+              >
+                Clinical Markers
+              </text>
+
+              <text
+                x="404"
+                y="211"
+                text-anchor="end"
+                class="radar-label"
+              >
+                Lifestyle Behaviors
+              </text>
+
+              <text
+                x="215"
+                y="415"
+                text-anchor="middle"
+                class="radar-label"
+              >
+                Functional Health
+              </text>
+
+              <text
+                x="27"
+                y="211"
+                text-anchor="start"
+                class="radar-label"
+              >
+                Positive Resilience
+              </text>
+
+
+            </svg>
+
+          </div>
+
+
+
+          <!-- DESCRIPTION -->
+
+          <div class="visual-description">
+
+
+            <p>
+
+              The radar chart provides a balanced view of the four
+              CAQ domains. A larger and more symmetrical shape
+              indicates stronger, more comprehensive cardiovascular
+              health.
+
+            </p>
+
+
+            <p>
+
+              Narrow or uneven areas can highlight opportunities
+              for targeted improvement and shared goal-setting
+              between patients and clinicians.
+
+            </p>
+
+
+            <ul class="benefits">
+
+
+              <li>
+
+                <span class="check">
+                  ✓
+                </span>
+
+                <span>
+                  Update values dynamically from clinic or
+                  app data feeds.
+                </span>
+
+              </li>
+
+
+              <li>
+
+                <span class="check">
+                  ✓
+                </span>
+
+                <span>
+                  Track trends over time to visualize
+                  lifestyle impact.
+                </span>
+
+              </li>
+
+
+              <li>
+
+                <span class="check">
+                  ✓
+                </span>
+
+                <span>
+                  Surface tailored coaching tips for the
+                  lowest-scoring domain.
+                </span>
+
+              </li>
+
+
+            </ul>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         SCORE
+    ======================================================== -->
+
+    <section class="score-section">
+
+      <div class="container score-inner">
+
+
+        <div>
+
+          <h2>
+            From Risk Prediction to Health Improvement
+          </h2>
+
+          <p>
+
+            The CAQ Index is designed to make cardiovascular
+            health measurable, understandable, and actionable
+            over time.
+
+          </p>
+
+        </div>
+
+
+        <div class="score-number">
+
+          0–100
+
+          <small>
+            CAQ Score
+          </small>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =======================================================
+         DISCLAIMER
+    ======================================================== -->
+
+    <section class="disclaimer">
+
+      <div class="container">
+
+        <p>
+
+          The CAQ Index presented on this website is a proposed
+          conceptual framework. It is intended for discussion,
+          research, and educational purposes and should not be
+          interpreted as a validated clinical risk score or as
+          a substitute for professional medical evaluation.
+
+        </p>
+
+      </div>
+
+    </section>
+
+
+  </main>
+
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+
+  <footer>
+
+    <div class="container footer-inner">
+
+
+      <div>
+
+        <div class="footer-brand">
+          CAQ Index
+        </div>
+
+        <div class="footer-subtitle">
+          Coronary Artery Quality
+        </div>
+
+      </div>
+
+
+      <div class="footer-right">
+
+        © <span id="year"></span>
+        Coronary Artery Quality (CAQ) Index.
+        <br>
+
+        Concept by Dr. Dokyoung Yoon, MD, PhD.
+
+      </div>
+
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- =========================================================
+       SIMPLE JAVASCRIPT
+  ========================================================== -->
+
+  <script>
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+
+    /*
+      Highlight the navigation item corresponding
+      to the section currently visible on the page.
+    */
+
+    const sections = document.querySelectorAll(
+      "main section[id]"
+    );
+
+    const navLinks = document.querySelectorAll(
+      "nav a"
+    );
+
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting) {
+
+            navLinks.forEach((link) => {
+              link.classList.remove("active");
+            });
+
+
+            const activeLink =
+              document.querySelector(
+                'nav a[href="#' +
+                entry.target.id +
+                '"]'
+              );
+
+
+            if (activeLink) {
+              activeLink.classList.add("active");
+            }
+
+          }
+
+        });
+
+      },
+
+      {
+        rootMargin:
+          "-25% 0px -65% 0px"
+      }
+
+    );
+
+
+    sections.forEach((section) => {
+      observer.observe(section);
+    });
+
+  </script>
+
+
+</body>
+</html>
